@@ -1,38 +1,39 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, {Schema, model, InferSchemaType} from 'mongoose';
 
-interface IUser extends Document {
-    Username: string;
-    DisplayName: string;
-    Password: string;
-    ProfilePicture?: string;
-    RegisterDate: Date;
-}
-
-const UserSchema: Schema<IUser> = new Schema({
-    Username: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    DisplayName: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    Password: {
-        type: String,
-        required: true
-    },
-    ProfilePicture: {
-        type: String,
-        default: null
-    },
-    RegisterDate: {
-        type: Date,
-        required: true
-    }
+/**
+ * User schema for mongoDB.
+ */
+const userSchema = new Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  displayName: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  profilePicture: {
+    type: String,
+    default: null
+  },
+  registerDate: {
+    type: Date,
+    required: true
+  }
 });
 
-const User = mongoose.model<IUser>('User', UserSchema);
+/**
+ * An interface for typescript of the mongoDB schema.
+ */
+type IUser = InferSchemaType<typeof userSchema>;
 
-export { User };
+// Create the Mongoose model
+const User = model<IUser>('User', userSchema);
+
+export {User, IUser};
