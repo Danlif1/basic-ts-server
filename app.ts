@@ -1,8 +1,7 @@
 import express, {Express, Request, Response} from "express";
 import dotenv from "dotenv";
-import mongoose from "mongoose"; // Import mongoose
+import mongoose from "mongoose";
 import registerRouter from './routes/register';
-import {authenticateToken} from "./middleware/authenticateToken"; // Import register routes
 
 dotenv.config();
 

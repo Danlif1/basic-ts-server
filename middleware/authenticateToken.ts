@@ -4,8 +4,6 @@ import {join} from 'path';
 import jwt from 'jsonwebtoken';
 import {IUserRequest} from "../models/interfaces";
 
-dotenv.config({path: join(__dirname, '..', '.env')});
-
 /**
  * This function should be called before any api request that needs you to log in to work.
  * @param req In the request there should be the authorization token in the format bearer [token] in the header.
