@@ -1,21 +1,12 @@
-import {Document} from 'mongoose';
-import {User} from '../models/user';
+import {User, IUser} from '../models/user';
 import jwt from 'jsonwebtoken';
 import * as dotenv from "dotenv";
 import {join} from "path";
-import {hashPassword} from "../middleware/encrypt";
 
 dotenv.config({path: join(__dirname, '..', '.env')});
 
-interface IUser extends Document {
-  Username: string;
-  DisplayName: string;
-  Password: string;
-  ProfilePicture: string;
-}
-
-async function getUserByUsername(username: string, hUsername: string): Promise<IUser | null> {
-  if (hUsername && (username !== hUsername)) {
+async function getUserByUsername(username: string, headerUsername: string): Promise<IUser | null> {
+  if (headerUsername && (username !== headerUsername)) {
     return null;
   }
   const user = await User.findOne({Username: username}).exec();
