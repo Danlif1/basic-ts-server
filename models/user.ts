@@ -32,4 +32,4 @@ type IUser = InferSchemaType<typeof UserSchema>;
 // Create the Mongoose model
 const User = model<IUser>('User', UserSchema);
 
-export {User};
+export {User, IUser};
