@@ -1,9 +1,5 @@
 import {User, IUser} from '../models/user';
 import jwt from 'jsonwebtoken';
-import * as dotenv from "dotenv";
-import {join} from "path";
-
-dotenv.config({path: join(__dirname, '..', '.env')});
 
 /**
  * This function gets a username we want to know about, and the person who created the request,
@@ -40,9 +36,11 @@ async function registerUser(username: string | null, displayName: string | null,
     profilePicture = "default";
   }
   const userByName = await User.findOne({username: username});
-  if (userByName) {
+  const userByDisplayName = await User.findOne({displayName: displayName});
+  if (userByName || userByDisplayName) {
     return null;
   }
+
   const registerDate = Date.now();
   const newUser = await new User({
     username: username,
@@ -70,7 +68,7 @@ async function generateToken(username: string, password: string): Promise<string
   return jwt.sign(payload, key, {expiresIn: '1h'});
 }
 
-module.exports = {
+export const registerService = {
   getUserByUsername,
   registerUser,
   generateToken

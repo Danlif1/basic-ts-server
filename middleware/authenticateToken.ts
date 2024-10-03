@@ -1,10 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
-import * as dotenv from 'dotenv';
-import {join} from 'path';
 import jwt from 'jsonwebtoken';
 import {IUserRequest} from "../models/interfaces";
-
-dotenv.config({path: join(__dirname, '..', '.env')});
 
 /**
  * This function should be called before any api request that needs you to log in to work.

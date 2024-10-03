@@ -1,8 +1,7 @@
 import {Request, Response} from 'express';
 import {hashPassword} from "../middleware/encrypt";
 import {IUserRequest} from "../models/interfaces";
-
-const registerService = require('../services/register');
+import {registerService} from '../services/register';
 
 const {join} = require("path");
 
