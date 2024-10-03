@@ -1,4 +1,4 @@
-# basic-ts-server
+# basic ts server
 
 ### This repo is meant to be a basic copy-paste repository to quick start a new server in typescript
 
