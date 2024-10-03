@@ -1,14 +1,7 @@
-import mongoose, {Document, Schema} from 'mongoose';
+import mongoose, {Schema, model, InferSchemaType} from 'mongoose';
 
-interface IUser extends Document {
-  Username: string;
-  DisplayName: string;
-  Password: string;
-  ProfilePicture?: string;
-  RegisterDate: Date;
-}
-
-const UserSchema: Schema<IUser> = new Schema({
+// Define the schema
+const UserSchema = new Schema({
   Username: {
     type: String,
     required: true,
@@ -33,6 +26,10 @@ const UserSchema: Schema<IUser> = new Schema({
   }
 });
 
-const User = mongoose.model<IUser>('User', UserSchema);
+// Infer the schema type from the UserSchema
+type IUser = InferSchemaType<typeof UserSchema>;
+
+// Create the Mongoose model
+const User = model<IUser>('User', UserSchema);
 
 export {User};
