@@ -8,6 +8,7 @@ It supports login, signup, and viewing the frontend.
 
 ## RUN
 ```
+ npm i
  npx ts-node ./app.ts
 ```
 
@@ -43,4 +44,4 @@ For example: A new post model (Don't forget to change the user model accordingly
 
 ### env changes:
 
-Before runnning the code don't forget to change the env in: SECRET_ENC_KEY (To be random), SECRET_AUTH_KEY (To be random), CONNECTION_STRING (To have the project name in the end)
+Before running the code don't forget to change the env in: SECRET_ENC_KEY (To be random), SECRET_AUTH_KEY (To be random), CONNECTION_STRING (To have the project name in the end)
