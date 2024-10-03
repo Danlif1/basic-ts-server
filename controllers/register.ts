@@ -1,17 +1,14 @@
 import {Request, Response} from 'express';
 import {hashPassword} from "../middleware/encrypt";
+import {IUserRequest} from "../models/interfaces";
 
 const registerService = require('../services/register');
 
 const {join} = require("path");
 
-interface registerRequest extends Request {
-  user?: {
-    username: string;
-  };
-}
 
-async function getUserByUsername(req: registerRequest, res: Response): Promise<Response> {
+
+async function getUserByUsername(req: IUserRequest, res: Response): Promise<Response> {
   try {
     if (!req.user || !req.user.username) {
       return res.status(404).json({error: 'User not found'});

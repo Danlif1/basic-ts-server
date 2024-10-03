@@ -2,14 +2,10 @@ import {Request, Response, NextFunction} from 'express';
 import * as dotenv from 'dotenv';
 import {join} from 'path';
 import jwt from 'jsonwebtoken';
+import {IUserRequest} from "../models/interfaces";
 
 dotenv.config({ path: join(__dirname, '..', '.env') });
 
-interface IUserRequest extends Request {
-    user?: {
-        username: string;
-    };
-}
 
 export function authenticateToken(req: IUserRequest, res: Response, next: NextFunction): void {
     const authHeader = req.headers['authorization'];
