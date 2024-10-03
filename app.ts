@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from "express";
+import express, {Express, Request, Response} from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose"; // Import mongoose
 import registerRouter from './routes/register';
@@ -13,21 +13,21 @@ const port = process.env.PORT || 5000;
 const dbConnectionString = process.env.CONNECTION_STRING;
 
 mongoose.connect(dbConnectionString as string)
-    .then(() => {
-        console.log("Connected to MongoDB");
-    })
-    .catch((error) => {
-        console.error("Error connecting to MongoDB:", error);
-    });
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
+  });
 
 app.use(express.json());
 
 app.use('/api', registerRouter);
 
 app.get("/", (req: Request, res: Response) => {
-    res.send("Express + TypeScript Server");
+  res.send("Express + TypeScript Server");
 });
 
 app.listen(port, () => {
-    console.log(`[server]: Server is running at http://localhost:${port}`);
+  console.log(`[server]: Server is running at http://localhost:${port}`);
 });

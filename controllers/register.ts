@@ -7,7 +7,12 @@ const registerService = require('../services/register');
 const {join} = require("path");
 
 
-
+/**
+ * Given a username, return that user's data.
+ * @param req In the request there should be the username wanted in the path.
+ * @param res In the result there would be either an error with the correlated error message,
+ * or the user's data.
+ */
 async function getUserByUsername(req: IUserRequest, res: Response): Promise<Response> {
   try {
     if (!req.user || !req.user.username) {
@@ -23,29 +28,47 @@ async function getUserByUsername(req: IUserRequest, res: Response): Promise<Resp
   }
 }
 
+/**
+ * Registering a user.
+ * @param req In the request there should be: username, password, displayName (all required),
+ * and profilePicture (optional).
+ * @param res In the result there would be either an error with the correlated error message,
+ * or the message Success with status 200.
+ */
 async function registerUser(req: Request, res: Response): Promise<Response> {
-  if (!req.body.Username) {
+  if (!req.body.username) {
     return res.status(409).json({error: 'Please provide a username'});
   }
-  const user = await registerService.registerUser(req.body.Username.toLowerCase(),
-    req.body.DisplayName,
-    hashPassword(req.body.Password),
-    req.body.ProfilePicture);
+  const user = await registerService.registerUser(req.body.username.toLowerCase(),
+    req.body.displayName,
+    hashPassword(req.body.password),
+    req.body.profilePicture);
   if (!user) {
     return res.status(409).json({error: 'Username already exists'});
   }
   return res.status(200).json({message: 'Success'});
 }
 
+/**
+ * Redirects home.
+ * @param req Nothing/Everything.
+ * @param res the frontend.
+ */
 async function redirectHome(req: Request, res: Response): Promise<void> {
   res.sendFile(join(__dirname, '..', 'public', 'index.html'));
 }
 
+/**
+ * Login.
+ * @param req In the request there should be: username, and password.
+ * @param res In the result there would be either an error with the correlated error message,
+ * or the token correlated to the user requesting it.
+ */
 async function generateToken(req: Request, res: Response) {
-  if (!req.body.Username || !req.body.Password) {
+  if (!req.body.username || !req.body.password) {
     return res.status(404).json({error: 'invalid username and or password'});
   }
-  const token = await registerService.generateToken(req.body.Username.toLowerCase(), hashPassword(req.body.Password));
+  const token = await registerService.generateToken(req.body.username.toLowerCase(), hashPassword(req.body.password));
   if (!token) {
     return res.status(404).json({error: 'invalid username and or password'});
   }

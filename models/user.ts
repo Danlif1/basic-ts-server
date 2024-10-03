@@ -1,35 +1,39 @@
 import mongoose, {Schema, model, InferSchemaType} from 'mongoose';
 
-// Define the schema
-const UserSchema = new Schema({
-  Username: {
+/**
+ * User schema for mongoDB.
+ */
+const userSchema = new Schema({
+  username: {
     type: String,
     required: true,
     unique: true
   },
-  DisplayName: {
+  displayName: {
     type: String,
     required: true,
     unique: true
   },
-  Password: {
+  password: {
     type: String,
     required: true
   },
-  ProfilePicture: {
+  profilePicture: {
     type: String,
     default: null
   },
-  RegisterDate: {
+  registerDate: {
     type: Date,
     required: true
   }
 });
 
-// Infer the schema type from the UserSchema
-type IUser = InferSchemaType<typeof UserSchema>;
+/**
+ * An interface for typescript of the mongoDB schema.
+ */
+type IUser = InferSchemaType<typeof userSchema>;
 
 // Create the Mongoose model
-const User = model<IUser>('User', UserSchema);
+const User = model<IUser>('User', userSchema);
 
 export {User, IUser};
