@@ -1,6 +1,4 @@
 import {Request, Response, NextFunction} from 'express';
-import * as dotenv from 'dotenv';
-import {join} from 'path';
 import jwt from 'jsonwebtoken';
 import {IUserRequest} from "../models/interfaces";
 

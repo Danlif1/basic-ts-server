@@ -1,6 +1,4 @@
 import {createHmac} from 'crypto';
-import * as dotenv from 'dotenv';
-import {join} from 'path';
 
 /**
  * Hashing the password.

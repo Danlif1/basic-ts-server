@@ -1,7 +1,5 @@
 import {User, IUser} from '../models/user';
 import jwt from 'jsonwebtoken';
-import * as dotenv from "dotenv";
-import {join} from "path";
 
 /**
  * This function gets a username we want to know about, and the person who created the request,
