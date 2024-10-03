@@ -1,8 +1,8 @@
-import express, { Router } from 'express';
-import { registerController } from '../controllers/register';
-const registerRouter: Router = express.Router();
-const { authenticateToken } = require('../middleware/authenticateToken');
+import express, {Router} from 'express';
+import {registerController} from '../controllers/register';
 
+const registerRouter: Router = express.Router();
+const {authenticateToken} = require('../middleware/authenticateToken');
 
 
 registerRouter.post('/tokens', registerController.generateToken);

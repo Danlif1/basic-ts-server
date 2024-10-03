@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
+import {Request, Response, NextFunction} from 'express';
 import * as dotenv from 'dotenv';
-import { join } from 'path';
+import {join} from 'path';
 import jwt from 'jsonwebtoken';
 
 dotenv.config({ path: join(__dirname, '..', '.env') });
