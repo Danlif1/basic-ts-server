@@ -6,6 +6,11 @@ The repo supports stuff that is universal for every application
 
 It supports login, signup, and viewing the frontend.
 
+## RUN
+```
+ npx ts-node ./app.ts
+```
+
 ## How to add more functionality
 
 In routes, controllers, and services add a new file meant for the new functionality
