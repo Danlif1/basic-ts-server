@@ -9,17 +9,17 @@ import {logError, logForbidden} from "../utils/logger";
  * @param username The user we want to access
  * @param headerUsername Currently we support that only the user can access his data.
  */
-async function getUserByUsername(username: string, headerUsername: string): Promise<IUser | null> {
+async function getUserByUsername(username: string, headerUsername: string): Promise<IUser> {
   if (headerUsername && (username !== headerUsername)) {
     await logForbidden(`User: ${headerUsername} tried accessing user: ${username} data`);
-    return null;
+    throw new Error('You do not have premission to view this user\'s data');
   }
   const user = await User.findOne({username: username});
   if (user) {
     return user as IUser;
   }
   await logError(`No user with username: ${username} found`);
-  return null;
+  throw new Error('User not found');
 }
 
 /**
@@ -30,10 +30,10 @@ async function getUserByUsername(username: string, headerUsername: string): Prom
  * @param profilePicture The profile picture of the user (Optional).
  */
 async function registerUser(username: string | null, displayName: string | null,
-                            password: string | null, profilePicture: string | null): Promise<boolean | null> {
+                            password: string | null, profilePicture: string | null): Promise<boolean> {
   if (!username || !displayName || !password) {
     logError(`Missing an attribute for registering a user: ${username}, ${displayName}, ${password}`);
-    return null;
+    throw new Error('Please fill all required fields');
   }
   if (!profilePicture) {
     profilePicture = "default";
@@ -42,7 +42,7 @@ async function registerUser(username: string | null, displayName: string | null,
   const userByDisplayName = await User.findOne({displayName: displayName});
   if (userByName || userByDisplayName) {
     logError(`Tried creating a user but either username or displayName were already taken ${username}, ${displayName}`)
-    return null;
+    throw new Error('Username is already taken');
   }
 
   const registerDate = Date.now();
@@ -67,6 +67,12 @@ async function generateToken(username: string, password: string): Promise<string
     username,
     password
   };
+
+  const existingUser = await User.findOne({username: username, password: password});
+  if (!existingUser) {
+    throw new Error('Wrong password or username');
+  }
+
   const key = process.env.SECRET_AUTH_KEY || 'default-auth-secret';
 
   return jwt.sign(payload, key, {expiresIn: '1h'});
