@@ -35,8 +35,8 @@ async function getUserByUsername(req: IUserRequest, res: Response): Promise<Resp
  * or the message Success with status 200.
  */
 async function registerUser(req: Request, res: Response): Promise<Response> {
-  if (!req.body.username) {
-    return res.status(409).json({error: 'Please provide a username'});
+  if (!req.body.username || !req.body.password) {
+    return res.status(409).json({error: 'Please provide a username and password'});
   }
   const user = await registerService.registerUser(req.body.username.toLowerCase(),
     req.body.displayName,

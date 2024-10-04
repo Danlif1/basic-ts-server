@@ -12,7 +12,7 @@ async function getUserByUsername(username: string, headerUsername: string): Prom
   if (headerUsername && (username !== headerUsername)) {
     return null;
   }
-  const user = await User.findOne({username: username}).exec();
+  const user = await User.findOne({username: username});
   if (user) {
     return user as IUser;
   }
