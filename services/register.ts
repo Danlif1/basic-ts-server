@@ -63,6 +63,12 @@ async function generateToken(username: string, password: string): Promise<string
     username,
     password
   };
+
+  const existingUser = await User.findOne({username: username, password: password});
+  if (!existingUser) {
+    throw new Error('Wrong password or username');
+  }
+
   const key = process.env.SECRET_AUTH_KEY || 'default-auth-secret';
 
   return jwt.sign(payload, key, {expiresIn: '1h'});
