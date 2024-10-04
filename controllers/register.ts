@@ -1,7 +1,8 @@
 import {Request, Response} from 'express';
-import {hashPassword} from "../middleware/encrypt";
+import {hashPassword} from "../utils/encrypt";
 import {IUserRequest} from "../models/interfaces";
 import {registerService} from '../services/register';
+import {logAction, logInternalError} from "../utils/logger";
 
 const {join} = require("path");
 
@@ -21,8 +22,10 @@ async function getUserByUsername(req: IUserRequest, res: Response): Promise<Resp
     if (!user) {
       return res.status(404).json({error: 'User not found'});
     }
+    await logAction(`Accessed user ${user.username} data from user: ${req.user.username.toLowerCase()}`);
     return res.status(200).json(user);
   } catch (error) {
+    await logInternalError(`Error in getUserByUsername, req.user: ${req.user}, error: ${error}`);
     return res.status(500).json({error: 'Internal server error'});
   }
 }
@@ -35,8 +38,8 @@ async function getUserByUsername(req: IUserRequest, res: Response): Promise<Resp
  * or the message Success with status 200.
  */
 async function registerUser(req: Request, res: Response): Promise<Response> {
-  if (!req.body.username) {
-    return res.status(409).json({error: 'Please provide a username'});
+  if (!req.body.username || !req.body.password) {
+    return res.status(409).json({error: 'Please provide a username and password'});
   }
   const user = await registerService.registerUser(req.body.username.toLowerCase(),
     req.body.displayName,
@@ -45,6 +48,7 @@ async function registerUser(req: Request, res: Response): Promise<Response> {
   if (!user) {
     return res.status(409).json({error: 'Username already exists'});
   }
+  await logAction(`Registered user ${req.body.username.toLowerCase()}`);
   return res.status(200).json({message: 'Success'});
 }
 
@@ -71,6 +75,7 @@ async function generateToken(req: Request, res: Response) {
   if (!token) {
     return res.status(404).json({error: 'invalid username and or password'});
   }
+  await logAction(`Generated token for: ${req.body.username.toLowerCase()}`);
   res.send(token);
 }
 

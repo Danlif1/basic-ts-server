@@ -2,6 +2,7 @@ import express, {Express, Request, Response} from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import registerRouter from './routes/register';
+import {logAction, logInternalError} from "./utils/logger";
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ mongoose.connect(dbConnectionString as string)
     console.log("Connected to MongoDB");
   })
   .catch((error) => {
-    console.error("Error connecting to MongoDB:", error);
+    logInternalError("Error connecting to MongoDB:" + error).then();
   });
 
 app.use(express.json());
@@ -28,5 +29,5 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
+  logAction(`[server]: Server is running at http://localhost:${port}`).then();
 });

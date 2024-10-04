@@ -1,5 +1,6 @@
 import {User, IUser} from '../models/user';
 import jwt from 'jsonwebtoken';
+import {logError, logForbidden} from "../utils/logger";
 
 /**
  * This function gets a username we want to know about, and the person who created the request,
@@ -10,13 +11,14 @@ import jwt from 'jsonwebtoken';
  */
 async function getUserByUsername(username: string, headerUsername: string): Promise<IUser | null> {
   if (headerUsername && (username !== headerUsername)) {
+    await logForbidden(`User: ${headerUsername} tried accessing user: ${username} data`);
     return null;
   }
-  const user = await User.findOne({username: username}).exec();
+  const user = await User.findOne({username: username});
   if (user) {
     return user as IUser;
   }
-
+  await logError(`No user with username: ${username} found`);
   return null;
 }
 
@@ -30,6 +32,7 @@ async function getUserByUsername(username: string, headerUsername: string): Prom
 async function registerUser(username: string | null, displayName: string | null,
                             password: string | null, profilePicture: string | null): Promise<boolean | null> {
   if (!username || !displayName || !password) {
+    logError(`Missing an attribute for registering a user: ${username}, ${displayName}, ${password}`);
     return null;
   }
   if (!profilePicture) {
@@ -38,6 +41,7 @@ async function registerUser(username: string | null, displayName: string | null,
   const userByName = await User.findOne({username: username});
   const userByDisplayName = await User.findOne({displayName: displayName});
   if (userByName || userByDisplayName) {
+    logError(`Tried creating a user but either username or displayName were already taken ${username}, ${displayName}`)
     return null;
   }
 
